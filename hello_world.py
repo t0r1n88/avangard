@@ -18,8 +18,9 @@ for i in range(0, 30):
         sheet['E' + str(raw)] = element['vacancy']['employment']
         sheet['F' + str(raw)] = element['vacancy']['schedule']
         sheet['G' + str(raw)] = element['vacancy']['category']['specialisation']
+        sheet['H' + str(raw)] = element['vacancy']['duty']
         try:
-            sheet['H' + str(raw)] = element['vacancy']['requirement']['education']
+            sheet['I' + str(raw)] = element['vacancy']['requirement']['education']
         except KeyError:
             print("education")
         raw = raw + 1

@@ -1,9 +1,10 @@
 import requests
 import openpyxl
 import json
+#trudvsem
 
-wb = openpyxl.load_workbook('C:/COPP/avangard/data/vacancies.xlsx')
-sheet = wb['test']
+wb = openpyxl.load_workbook('C:/COPP/avangard/data/trudvsem.xlsx')
+sheet = wb['1']
 i = 0
 raw = 2
 for i in range(0, 30):

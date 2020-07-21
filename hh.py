@@ -11,8 +11,10 @@ for i in range(0, 18):
     for element in response.json()['items']:
         sheet['A' + str(1)] = 'Вакансия'
         sheet['A' + str(raw)] = element['name']
-        # sheet['B' + str(raw)] = element['vacancy']['source']
-        # sheet['C' + str(raw)] = element['vacancy']['salary_min']
+        sheet['B' + str(1)] = 'Компания'
+        sheet['B' + str(raw)] = element['employer']['name']
+        sheet['C' + str(1)] = 'Обязанности'
+        sheet['C' + str(raw)] = element['snippet']['responsibility']
         # sheet['D' + str(raw)] = element['vacancy']['salary_max']
         # sheet['E' + str(raw)] = element['vacancy']['employment']
         # sheet['F' + str(raw)] = element['vacancy']['schedule']
@@ -32,8 +34,8 @@ for i in range(0, 9):
     print(response.json())
     for element in response.json()['items']:
         sheet['A' + str(raw)] = element['name']
-        # sheet['B' + str(raw)] = element['vacancy']['source']
-        # sheet['C' + str(raw)] = element['vacancy']['salary_min']
+        sheet['B' + str(raw)] = element['employer']['name']
+        sheet['C' + str(raw)] = element['snippet']['responsibility']
         # sheet['D' + str(raw)] = element['vacancy']['salary_max']
         # sheet['E' + str(raw)] = element['vacancy']['employment']
         # sheet['F' + str(raw)] = element['vacancy']['schedule']

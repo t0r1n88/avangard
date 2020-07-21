@@ -28,4 +28,4 @@ for i in range(0, 30):
         raw = raw + 1
         print(raw)
     i = i + 1
-wb.save('C:/COPP/avangard/data/vacancies.xlsx')
+wb.save('C:/COPP/avangard/data/trudvsem.xlsx')

@@ -9,7 +9,6 @@ tree = ET.parse(PATH_TO_FILE)
 root = tree.getroot()
 for element in tree.findall("region"):  # or tree.findall('globalVariables/globalVariable/name')
     name = element.find("name")
-    # print(element.tag, name.text, element.attrib)
     if name.text == 'Республика Бурятия':
         chosen_elem = element
         break

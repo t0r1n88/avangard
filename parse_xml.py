@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 import xlsxwriter
 
-PATH_TO_FILE = 'data/test.xml'
+PATH_TO_FILE = 'data/employers.xml'
 TEXT = 'Республика Бурятия'
 
 
@@ -32,6 +32,14 @@ def get_root(path_to_file: str) -> object:
     root = tree.getroot()
     return root
 
+def get_chosen_element_get_from_big_xml(root):
+    """
+    Функция для получения резюме из 10 гигабайтного xml
+    :param root: Корень xml файла
+    :return: Поддеререво относящеееся к Республике Бурятия.
+    есть смутное подозрение что будет проще забирать с помощью json
+    """
+    pass
 
 def parsing_chosen_element(chosen_element):
     """

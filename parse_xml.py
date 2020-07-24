@@ -54,49 +54,84 @@ def parsing_chosen_element(chosen_element):
     return cat_lst, value_lst
 
 
-def export_to_excel(chosen_element, path_to_dir=os.getcwd()):
-    pass
+def export_to_excel(cat_lst,value_lst, path_to_dir=os.getcwd()):
+    """
+    Функция предназначенная для экспорта значений полученных из xml в файл с разрешением xlsx
+    :param cat_lst: список содержащий в себе категории
+    :param value_lst: список содержащий значения которые принимают эти категории
+    :param path_to_dir: путь к к создаваемому файлу.По умолчанию создается в той же директории что и скрипт
+    :return: Создает файл с разрешением xlsx с названием 2020-07-24(текущая дата)
+    """
+    name_file = '/data/' + str(datetime.now())[:10] + '.xlsx'
+    # Открываем новый файл на запись
+    workbook = xlsxwriter.Workbook(path_to_dir + name_file)
+    # Создаем лист
+    worksheet = workbook.add_worksheet('Лист 1')
+    bold = workbook.add_format({'bold':True})
+
+    # Создаем заголовок
+    worksheet.write('A1', 'Категория компании',bold)
+    worksheet.write('B1', 'Количество компаний в данной категории',bold)
+    # Зададим ширину колонок
+    worksheet.set_column('A:A',60)
+    worksheet.set_column('B:B',40)
+    # Записываем данные из списков в колонки
+    worksheet.write_column(1, 0, cat_lst)
+    worksheet.write_column(1, 1, value_lst)
+    # # Создадим график
+    # chart = workbook.add_chart({'type':'column'})
+    # # Добавляем значения на базе которых будем строить график
+    # chart.add_series({'values':'Лист 1!$B$3:$B$6'})
+    # # Вставляем график в нужную ячейку
+    # worksheet.insert_chart('C3',chart)
+    # Закрываем файл
+    workbook.close()
 
 
 if __name__ == "__main__":
     # Получаем корень дерева
-    # root = get_root(PATH_TO_FILE)
-    # Получаем корень с нужным названием.
-    # chosen_root = get_chosen_element(root,TEXT)
-    tree = ET.parse(PATH_TO_FILE)
-    root = tree.getroot()
-    chosen_elem = None
-    for element in tree.findall("region"):  # or tree.findall('globalVariables/globalVariable/name')
-        name = element.find("name")
-        # print(element.tag, name.text, element.attrib)
-        if name.text == 'Республика Бурятия':
-            chosen_elem = element
-            break
-    cat_lst = []
-    value_lst = []
-    for elem in chosen_elem.findall('statistics/statistic'):
-        name = elem.find("name")
-        cat_lst.append(name.text)
-        value = elem.find('value')
-        value_lst.append(value.text)
-        print(name.text, value.text)
-    print(cat_lst, value_lst)
-    path = os.getcwd()
-    name_file = '/' + str(datetime.now())[:10] + '.xlsx'
-    # Открываем новый файл на запись
-    workbook = xlsxwriter.Workbook(path + name_file)
-    # Создаем лист
-    worksheet = workbook.add_worksheet('Лист 1')
-    # data = [
-    #     [1, 2, 3, 4, 5],
-    #     [2, 4, 6, 8, 10],
-    #     [3, 6, 9, 12, 15],
-    # ]
-    # worksheet.write_column(1,0,data[0])
-    # worksheet.write_column(1,1,data[1])
-    worksheet.write('A1', 'Категория компании')
-    worksheet.write('B1', 'Количество компаний в данной категории')
-    worksheet.write_column(1, 0, cat_lst)
-    worksheet.write_column(1, 1, value_lst)
+    root = get_root(PATH_TO_FILE)
+    # Получаем элемент с нужным именем
+    chosen_element = get_chosen_element(root,TEXT)
+    # Получаем данные из нужного элемента
+    cat_lst,val_lst = parsing_chosen_element(chosen_element)
+    # Экспортиртируем данные в excel
+    export_to_excel(cat_lst,val_lst)
 
-    workbook.close()
+
+
+    #
+    # # Получаем корень дерева
+    # # root = get_root(PATH_TO_FILE)
+    # # Получаем корень с нужным названием.
+    # # chosen_root = get_chosen_element(root,TEXT)
+    # tree = ET.parse(PATH_TO_FILE)
+    # root = tree.getroot()
+    # chosen_elem = None
+    # for element in tree.findall("region"):  # or tree.findall('globalVariables/globalVariable/name')
+    #     name = element.find("name")
+    #     # print(element.tag, name.text, element.attrib)
+    #     if name.text == 'Республика Бурятия':
+    #         chosen_elem = element
+    #         break
+    # cat_lst = []
+    # value_lst = []
+    # for elem in chosen_elem.findall('statistics/statistic'):
+    #     name = elem.find("name")
+    #     cat_lst.append(name.text)
+    #     value = elem.find('value')
+    #     value_lst.append(value.text)
+    #     print(name.text, value.text)
+    # print(cat_lst, value_lst)
+    # path = os.getcwd()
+    # name_file = '/' + str(datetime.now())[:10] + '.xlsx'
+    # # Открываем новый файл на запись
+    # workbook = xlsxwriter.Workbook(path + name_file)
+    # # Создаем лист
+    # worksheet = workbook.add_worksheet('Лист 1')
+    #
+    # worksheet.write('A1', 'Категория компании')
+    # worksheet.write('B1', 'Количество компаний в данной категории')
+    # worksheet.write_column(1, 0, cat_lst)
+    # worksheet.write_column(1, 1, value_lst)
+    # workbook.close()

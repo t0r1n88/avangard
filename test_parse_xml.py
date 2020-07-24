@@ -25,7 +25,7 @@ def test_get_root():
 
 def test_export_to_excel():
     path = os.getcwd()
-    name_file = '/' + str(datetime.now())[:10] + '.xlsx'
+    name_file = '/data/' + str(datetime.now())[:10] + '.xlsx'
     assert os.path.isfile(path + name_file)
 
 

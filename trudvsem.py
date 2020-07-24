@@ -31,12 +31,13 @@ def load_vacancy_trudvsem(region_code='0300000000000'):
     else:
         quantity_iter = quantity_vacances // limit
     #
+    json_strings = ''
     for i in range(0, 2):
         response = requests.get(f'{link}{region_code}?offset={str(i)}&limit=100')
         data = response.json()
-        with open(f'data/{name_file}.json', 'a', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False)
-
+        json_strings += json.dumps(data, ensure_ascii=False)
+    with open(f'data/{name_file}.json', 'w', encoding='utf-8') as file:
+        json.dump(json_strings, file, ensure_ascii=False)
 
 def export_json_excel(path_to_json_file, path_to_output_file=os.getcwd()):
     """
@@ -45,12 +46,14 @@ def export_json_excel(path_to_json_file, path_to_output_file=os.getcwd()):
     :param path_to_output_file: Адрес где будет создан файл xlsx(по умолчанию в текущей папке)
     :return:
     """
-
+    with open(path_to_json_file,'r') as file:
+        data = json.loads(file)
+        print(type(data))
 
 
 if __name__ == '__main__':
-    load_vacancy_trudvsem()
-    # export_json_excel()
+    # load_vacancy_trudvsem()
+    export_json_excel('data/2020-07-24.json')
 
     # wb = openpyxl.load_workbook('c:/Users/1/PycharmProjects/avangard/data/trudvsem.xlsx')
     # sheet = wb['1']

@@ -52,3 +52,13 @@ def input_data_trudvsem():
             arr.append(temp_dict)
         lst_vac.extend(arr)
     return lst_vac
+
+@pytest.fixture()
+def text_from_html():
+    """
+    Фикстура для создания списка строк для проверки очистки текста от html тегов
+    :return: Список строковых значений
+    """
+    testing_strings = ['','1234','afdswt','вапвпвап','<a>','<li Варрава','<olИванов>','<p> Lindy Booth</p>','Агранов/p>','Костицин<br><ol></l>',
+                       '<pCassandra Cilian /head>']
+    return testing_strings

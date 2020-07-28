@@ -3,7 +3,7 @@ from datetime import datetime
 import requests
 import json
 import xlsxwriter
-
+import re
 
 def load_vacancy_trudvsem(region_code='0300000000000'):
     """
@@ -62,7 +62,7 @@ def write_vacancy_to_json_trudvsem(data):
     """
     name_file = get_name_file('c:/Users/1/PycharmProjects/avangard/data/')
     with open(name_file, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False,indent=4)
+        json.dump(data, file, ensure_ascii=False, indent=4)
 
 
 def export_json_excel(path_to_json_file):
@@ -141,7 +141,13 @@ def export_json_excel(path_to_json_file):
 # worksheet.write_column(1, 0, cat_lst)
 # worksheet.write_column(1, 1, value_lst)
 
-
+def purification_text_from_html(text):
+    """
+    Функция для очистки текста от html-тегов
+    :param text:
+    :return:
+    """
+    pass
 def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
     """
     Функцция для получения имени файла

@@ -62,7 +62,7 @@ def write_vacancy_to_json_trudvsem(data):
     """
     name_file = get_name_file('c:/Users/1/PycharmProjects/avangard/data/')
     with open(name_file, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False)
+        json.dump(data, file, ensure_ascii=False,indent=4)
 
 
 def export_json_excel(path_to_json_file):

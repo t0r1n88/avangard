@@ -83,5 +83,18 @@ def test_correct_write_json_trudvsem(input_data_serviceabylity_trudvsem):
     assert len(data) == input_data_serviceabylity_trudvsem['meta']['total']
 
 
-def test_purification_text_from_html(text):
-    assert False
+def test_purification_text_from_html(text_from_html):
+    """
+    GIVEN(Дано) Текст содержащий html теги, также возможна пустая строка
+    WHEN(Когда) Используем функцию purification_text
+    THEN(Тогда) Должны быть корректно удалены  все html-теги
+    :param text_from_html:
+    :return:
+    """
+    # c = ['','1234','afdswt','вапвпвап','<a>',' Варрава','<ol>Иванов>','<p> Lindy Booth</p>','Агранов</p>','Костицин<br><ol></l>',
+    #                    '<p>Cassandra Cilian </head>']
+    d = list(map(purification_text_from_html, text_from_html))
+    verification_strings = ['', '1234', 'afdswt', 'вапвпвап', '', ' Варрава', 'Иванов', ' Lindy Booth', 'Агранов',
+                            'Костицин',
+                            'Cassandra Cilian ']
+    assert verification_strings == d

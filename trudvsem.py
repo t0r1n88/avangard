@@ -5,6 +5,7 @@ import json
 import xlsxwriter
 import re
 
+
 def load_vacancy_trudvsem(region_code='0300000000000'):
     """
     Функция для загрузки записи в json  вакансий и с сайта Trudvsem
@@ -147,7 +148,9 @@ def purification_text_from_html(text):
     :param text:
     :return:
     """
-    pass
+    return re.sub(r'(<(/?[^>]+)>)', '', text)
+
+
 def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
     """
     Функцция для получения имени файла
@@ -161,6 +164,6 @@ def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
 
 
 if __name__ == '__main__':
-    data = load_vacancy_trudvsem()
-    write_vacancy_to_json_trudvsem(data)
-    # export_json_excel('data/2020-07-27.json')
+    # data = load_vacancy_trudvsem()
+    # write_vacancy_to_json_trudvsem(data)
+    export_json_excel('data/2020-07-28.json')

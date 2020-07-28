@@ -59,6 +59,6 @@ def text_from_html():
     Фикстура для создания списка строк для проверки очистки текста от html тегов
     :return: Список строковых значений
     """
-    testing_strings = ['','1234','afdswt','вапвпвап','<a>','<li Варрава','<olИванов>','<p> Lindy Booth</p>','Агранов/p>','Костицин<br><ol></l>',
-                       '<pCassandra Cilian /head>']
+    testing_strings = ['','1234','afdswt','вапвпвап','<a>',' Варрава','<ol>Иванов','<p> Lindy Booth</p>','Агранов</p>','Костицин<br><ol></l>',
+                       '<p>Cassandra Cilian </head>']
     return testing_strings

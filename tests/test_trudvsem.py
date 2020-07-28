@@ -91,8 +91,6 @@ def test_purification_text_from_html(text_from_html):
     :param text_from_html:
     :return:
     """
-    # c = ['','1234','afdswt','вапвпвап','<a>',' Варрава','<ol>Иванов>','<p> Lindy Booth</p>','Агранов</p>','Костицин<br><ol></l>',
-    #                    '<p>Cassandra Cilian </head>']
     d = list(map(purification_text_from_html, text_from_html))
     verification_strings = ['', '1234', 'afdswt', 'вапвпвап', '', ' Варрава', 'Иванов', ' Lindy Booth', 'Агранов',
                             'Костицин',

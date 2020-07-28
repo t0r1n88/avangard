@@ -121,6 +121,11 @@ def export_json_excel(path_to_json_file):
         # Превращаем dict.values в список, чтобы было легче работать с ключами
         d = (list(dic.values()))[0]
         # Собираем строку которую будем записывать
+        # Очищаем строку примечаний term
+        if d.get('duty'):
+            text = purification_text_from_html(d['duty'])
+        else:
+            text = None
         # Извлекаем адреса
         address = list(d['addresses'].values())[0][0]
         row = d['source'], d['region']['name'], d['company'].get('name'), d['company'].get('ogrn'), d[
@@ -129,7 +134,7 @@ def export_json_excel(path_to_json_file):
             'salary_min'), d.get('salary_max'), d.get('job-name'), d['vac_url'], d['employment'], d['schedule'], d[
                   'category']['specialisation'], d['requirement'].get('education'), d.get(
             'qualification'), d['requirement'].get('experience'), address.get('location'), d.get(
-            'social_protected'), d['term']['text'] if d.get('term') else None, d.get('currency'), d.get('duty'), \
+            'social_protected'), d['term']['text'] if d.get('term') else None, d.get('currency'),text, \
               address.get('lng'), address.get('lat')
         worksheet.write_row(count_rows, 0, list(row))
     workbook.close()
@@ -148,7 +153,7 @@ def purification_text_from_html(text):
     :param text:
     :return:
     """
-    return re.sub(r'(<(/?[^>]+)>)', '', text)
+    return re.sub(r'</?\w*?>|&\w+;|<[^а-яА-ЯёЁ]+>', '', text)
 
 
 def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
@@ -159,7 +164,6 @@ def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
     :param type: Расширение файла(по умолчанию json)
     :return: Строку с именем файла
     """
-    print(path + name + type)
     return path + name + type
 
 

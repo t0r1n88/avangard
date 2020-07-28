@@ -2,8 +2,9 @@ from parse_xml import *
 import xml
 import os
 from datetime import datetime
+import pytest
 # Это все надо затолкать в фикстуру
-PATH_TO_FILE = 'data/test.xml'
+PATH_TO_FILE = '../data/test.xml'
 
 tree = ET.parse(PATH_TO_FILE)
 root = tree.getroot()
@@ -21,13 +22,13 @@ def test_get_chosen_element():
 def test_get_root():
     assert isinstance(get_root(PATH_TO_FILE), xml.etree.ElementTree.Element)
 
-
+@pytest.mark.skip(reason="no way of currently testing this")
 def test_export_to_excel():
     path = os.getcwd()
     name_file = '/data/' + str(datetime.now())[:10] + '.xlsx'
     assert os.path.isfile(path + name_file)
 
-
+@pytest.mark.xfail(reason='Тренировка')
 def test_parsing_chosen_element():
     return_value = parsing_chosen_element(chosen_elem)
     assert type(return_value) == tuple

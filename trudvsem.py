@@ -151,10 +151,11 @@ def get_name_file(path=os.getcwd(), name='/' + str(datetime.now())[:10], type='.
     :return: Строку с именем файла
     """
     path = 'data'
+    print(path + name + type)
     return path + name + type
 
 
 if __name__ == '__main__':
-    # data = load_vacancy_trudvsem()
-    # write_vacancy_to_json_trudvsem(data)
-    export_json_excel('data/2020-07-27.json')
+    data = load_vacancy_trudvsem()
+    write_vacancy_to_json_trudvsem(data)
+    # export_json_excel('data/2020-07-27.json')

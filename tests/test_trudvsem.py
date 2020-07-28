@@ -68,7 +68,7 @@ def test_write_vacancy_to_json_trudvsem(input_data_trudvsem):
     :return:
     """
     write_vacancy_to_json_trudvsem(input_data_trudvsem)
-    path = 'data' + '/' + str(datetime.now())[:10] + '.json'
+    path = 'c:/Users/1/PycharmProjects/avangard/data/' + str(datetime.now())[:10] + '.json'
     assert os.path.isfile(path)
 
 

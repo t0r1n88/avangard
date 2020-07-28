@@ -60,7 +60,7 @@ def write_vacancy_to_json_trudvsem(data):
     :param data: словарь
     :return: созданный файл json
     """
-    name_file = get_name_file('data')
+    name_file = get_name_file('c:/Users/1/PycharmProjects/avangard/data/')
     with open(name_file, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False)
 
@@ -142,7 +142,7 @@ def export_json_excel(path_to_json_file):
 # worksheet.write_column(1, 1, value_lst)
 
 
-def get_name_file(path=os.getcwd(), name='/' + str(datetime.now())[:10], type='.json'):
+def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
     """
     Функцция для получения имени файла
     :param path: Путь к файлу(по умолчанию путь до текущей директории)
@@ -150,7 +150,6 @@ def get_name_file(path=os.getcwd(), name='/' + str(datetime.now())[:10], type='.
     :param type: Расширение файла(по умолчанию json)
     :return: Строку с именем файла
     """
-    path = 'data'
     print(path + name + type)
     return path + name + type
 

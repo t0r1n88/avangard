@@ -90,7 +90,7 @@ def input_data_hh():
     else:
         quantity_iter = quantity_vacances // limit
 
-    for i in range(0, quantity_iter):
+    for i in range(0, 20):
         response = requests.get(f'{LINK_VACANCY_HH}?area={REGION_CODE_HH}&page={str(i)}&per_page={limit}')
         data = response.json()
         arr = []

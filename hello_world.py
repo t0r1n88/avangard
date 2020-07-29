@@ -4,6 +4,7 @@ import xlsxwriter
 import requests
 import json
 from trudvsem import *
+
 # path = os.getcwd()
 # name_file = str(datetime.now())[:10] + '.xlsx'
 # print(path+name_file)
@@ -18,14 +19,17 @@ from trudvsem import *
 #     response = requests.get("http://opendata.trudvsem.ru/api/v1/vacancies/region/0300000000000?offset=0")
 #     json.dump(response.json(),file,ensure_ascii=False,indent=4)
 
-c="""
-<ul>
-<li>Работа с документами.</li>
-<li>Решать организационные вопросы.</li>
-<li>Работа на компьютере</li>
-<li>Подготовка ежемесячной отчетности</li>
-<li>Прием звонков</li>
-</ul>
-"""
-print(c)
-print(purification_text_from_html(c))
+response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
+print(response.json()['items'])
+# with open('data/example_json_hh.json', 'w', encoding='utf-8') as file:
+#     json.dump(response.json(),file, ensure_ascii=False, indent=4)
+
+response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
+data = response.json()
+arr = []
+# Забираем вакансии
+vacancies = data['items']
+for vacancy in vacancies:
+    # Добавляем вакансии в список
+    arr.append(vacancy)
+print(arr)

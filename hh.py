@@ -1,7 +1,7 @@
 import json
 import re
 from datetime import datetime
-
+import pandas
 import requests
 import openpyxl
 import xlsxwriter
@@ -166,24 +166,10 @@ def export_json_to_excel_hh(path_to_json_file):
         driver_licence = extract_driver_licence_vacance_hh(vac)
         # Обработка описания вакансии.Удаление html-тегов
         description = purification_text_from_html(vac['description'])
-        row = vac['id'], vac['area']['name'], vac['name'], vac['salary'].get('from') if vac.get('salary', {}) else None, \
-              vac['salary'].get('to') if vac.get('salary', {}) else None, \
-              vac['salary'].get('gross') if vac.get('salary', {}) else None, vac['employer']['name'], \
-              vac['address'].get('city') if vac.get('address', {}) else None, \
-              vac['address'].get('street') if vac.get('address', {}) else None, \
-              vac['address'].get('building') if vac.get('address', {}) else None, \
-              vac['address'].get('raw') if vac.get('address', {}) else None, \
-              vac['experience']['name'], \
-              vac[
-                  'schedule']['name'], vac['employment']['name'],\
-              vac['contacts'].get('name') if vac.get('contacts', {}) else None,\
-              vac['contacts'].get('email') if vac.get('contacts', {}) else None, phones, specializations, \
-              driver_licence, vac['accept_handicapped'], vac['accept_kids'], vac['published_at'][:10], \
-              vac['created_at'][:10], description, vac['archived'], vac['address'].get('lat') if vac.get('address', {}) else None, \
-              vac['address'].get('lng') if vac.get('address', {}) else None
-
+        row = create_row_for_write_to_excel_hh(vac, phones, specializations, driver_licence, description)
         worksheet.write_row(count_rows, 0, list(row))
     workbook.close()
+
 
 def extract_phones_employment_hh(data):
     """
@@ -198,6 +184,7 @@ def extract_phones_employment_hh(data):
         arr.append(phone)
     return ','.join(arr)
 
+
 def extract_specialization_vacance_hh(data):
     """
     Функция для извлечения навыков необходимых для работы
@@ -208,6 +195,7 @@ def extract_specialization_vacance_hh(data):
     for el in data['specializations']:
         tmp_set_s.add(el['name'])
     return ','.join(tmp_set_s)
+
 
 def extract_driver_licence_vacance_hh(data):
     """
@@ -224,6 +212,61 @@ def extract_driver_licence_vacance_hh(data):
     else:
         return None
 
+
+def create_row_for_write_to_excel_hh(vac, phones, specializations, driver_licence, description):
+    """
+    Функция для создания строки , для записи в файл Excel
+    :param phones: Строка с телефонами работодателя
+    :param specializations: навыки для вакансии
+    :param driver_licence: водительские права
+    :param description: Описание вакансии
+    :return: Кортеж
+    """
+    # Конвертация булевых значений
+
+    row = vac['id'], vac['area']['name'], vac['name'], vac['salary'].get('from') if vac.get('salary', {}) else None, \
+          vac['salary'].get('to') if vac.get('salary', {}) else None, \
+          replace_bool(vac['salary'].get('gross')) if vac.get('salary', {}) else None, vac['employer']['name'], \
+          vac['address'].get('city') if vac.get('address', {}) else None, \
+          vac['address'].get('street') if vac.get('address', {}) else None, \
+          vac['address'].get('building') if vac.get('address', {}) else None, \
+          vac['address'].get('raw') if vac.get('address', {}) else None, \
+          replace_experience(vac['experience']['name']), \
+          vac[
+              'schedule']['name'], vac['employment']['name'], \
+          vac['contacts'].get('name') if vac.get('contacts', {}) else None, \
+          vac['contacts'].get('email') if vac.get('contacts', {}) else None, phones, specializations, \
+          driver_licence, replace_bool(vac['accept_handicapped']), replace_bool(vac['accept_kids']), vac[
+                                                                                                         'published_at'][
+                                                                                                     :10], \
+          vac['created_at'][:10], description, replace_bool(vac['archived']), vac['address'].get('lat') if vac.get(
+        'address',
+        {}) else None, \
+          vac['address'].get('lng') if vac.get('address', {}) else None
+    return row
+
+
+def replace_experience(text):
+    """
+    Функция для замены фразы 'Нет опыта' на фразу 'Не требуется'
+    :param text:Строка
+    :return:Строка
+    """
+    return 'Не требуется' if text == 'Нет опыта' else text
+
+
+def replace_bool(text):
+    """
+    Функция для замены булевых значений на Да,Нет
+    :param text:
+    :return: Строку Да,если text==true ,если text==false Нет
+    """
+    if text == True:
+        return 'Да'
+    elif text == False:
+        return 'Нет'
+    else:
+        return text
 
 
 def purification_text_from_html(text):

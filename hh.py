@@ -159,24 +159,11 @@ def export_json_to_excel_hh(path_to_json_file):
         # TODO  Сделать более изящное решение через map
         # Собираем строку которую будем записывать
         # Обрабатываем телефоны работодателя
-        arr = []
-        tmp = vac['contacts']['phones'] if vac.get('contacts') else []
-        for el in tmp:
-            phone = el['country'] + el['city'] + el['number']
-            arr.append(phone)
-        phones = ','.join(arr)
+        phones = extract_phones_employment_hh(vac)
         # Обрабатываем специализации
-        tmp_set_s = set()
-        for el in vac['specializations']:
-            tmp_set_s.add(el['name'])
-        specializations = ','.join(tmp_set_s)
-
+        specializations = extract_specialization_vacance_hh(vac)
         # Обрабатываем список водительских прав
-        tmp_set_d = set()
-        for val in vac['driver_license_types']:
-            tmp_set_d.add(val)
-        driver_license = ','.join(tmp_set_d)
-
+        driver_licence = extract_driver_licence_vacance_hh(vac)
         # Обработка описания вакансии.Удаление html-тегов
         description = purification_text_from_html(vac['description'])
         row = vac['id'], vac['area']['name'], vac['name'], vac['salary'].get('from') if vac.get('salary', {}) else None, \
@@ -191,12 +178,52 @@ def export_json_to_excel_hh(path_to_json_file):
                   'schedule']['name'], vac['employment']['name'],\
               vac['contacts'].get('name') if vac.get('contacts', {}) else None,\
               vac['contacts'].get('email') if vac.get('contacts', {}) else None, phones, specializations, \
-              driver_license, vac['accept_handicapped'], vac['accept_kids'], vac['published_at'][:10], \
+              driver_licence, vac['accept_handicapped'], vac['accept_kids'], vac['published_at'][:10], \
               vac['created_at'][:10], description, vac['archived'], vac['address'].get('lat') if vac.get('address', {}) else None, \
               vac['address'].get('lng') if vac.get('address', {}) else None
 
         worksheet.write_row(count_rows, 0, list(row))
     workbook.close()
+
+def extract_phones_employment_hh(data):
+    """
+    Функция для извлечения телефонов работодателя
+    :param data: Словарь с данными вакансии
+    :return: Строку с номерами телефонов
+    """
+    arr = []
+    tmp = data['contacts']['phones'] if data.get('contacts') else []
+    for el in tmp:
+        phone = el['country'] + el['city'] + el['number']
+        arr.append(phone)
+    return ','.join(arr)
+
+def extract_specialization_vacance_hh(data):
+    """
+    Функция для извлечения навыков необходимых для работы
+    :param data: Словарь с данными вакансии
+    :return: Строку с перечислением навыков
+    """
+    tmp_set_s = set()
+    for el in data['specializations']:
+        tmp_set_s.add(el['name'])
+    return ','.join(tmp_set_s)
+
+def extract_driver_licence_vacance_hh(data):
+    """
+    Функция для извлечения категорий водительских прав
+    :param data: Словарь с данными вакансии
+    :return: Строка с перечислением требуемых категорий или None
+    """
+    tmp_set_d = set()
+    if data['driver_license_types']:
+        for val in data['driver_license_types']:
+            tmp_set_d.add(val['id'])
+        driver_license = ','.join(tmp_set_d)
+        return driver_license
+    else:
+        return None
+
 
 
 def purification_text_from_html(text):

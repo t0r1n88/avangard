@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import datetime
 
 import requests
@@ -24,6 +25,7 @@ def get_parameters_hh(region=1118):
 
     return quantity_iter, limit
 
+
 def extract_vac_hh(data):
     """
     Функция для извлечения данных вакансий
@@ -37,6 +39,7 @@ def extract_vac_hh(data):
         # Добавляем вакансии в список
         arr.append(vacancy)
     return arr
+
 
 def load_vacancy_hh(region=1118, link='https://api.hh.ru/vacancies'):
     """
@@ -61,7 +64,8 @@ def load_vacancy_hh(region=1118, link='https://api.hh.ru/vacancies'):
         print(response.status_code)
         print(response.json())
 
-def write_vacancy_to_json_hh(data,mark='thin'):
+
+def write_vacancy_to_json_hh(data, mark='thin'):
     """
     Функция для записи
     :param data:
@@ -70,7 +74,7 @@ def write_vacancy_to_json_hh(data,mark='thin'):
     if mark == 'thin':
         name_file = get_name_file_hh('c:/Users/1/PycharmProjects/avangard/data/')
     else:
-        name_file ='c:/Users/1/PycharmProjects/avangard/data/' +str(datetime.now())[:10]+'_full_hh' + '.json'
+        name_file = 'c:/Users/1/PycharmProjects/avangard/data/' + str(datetime.now())[:10] + '_full_hh' + '.json'
     with open(name_file, 'w', encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
@@ -83,7 +87,7 @@ def get_name_file_hh(path, name='/' + str(datetime.now())[:10], type='.json'):
     :param type: Расширение файла(по умолчанию json)
     :return: Строку с именем файла
     """
-    return path + name +'_hh'+ type
+    return path + name + '_hh' + type
 
 
 def load_full_data_vacancy_hh(path_to_json_file, link='https://api.hh.ru/vacancies/'):
@@ -92,7 +96,7 @@ def load_full_data_vacancy_hh(path_to_json_file, link='https://api.hh.ru/vacanci
     :param path_to_json_file: путь до файла  где лежать сокращенные данные
     :return: json файл с полными данными по вакансиям
     """
-    with open(path_to_json_file,encoding='utf-8') as file:
+    with open(path_to_json_file, encoding='utf-8') as file:
         data = json.load(file)
     lst_vac = []
     # Перебираем вакансии, получаем id, по этому id делаем запрос
@@ -101,18 +105,20 @@ def load_full_data_vacancy_hh(path_to_json_file, link='https://api.hh.ru/vacanci
         data = response.json()
         lst_vac.append(data)
     return lst_vac
+
+
 def export_json_to_excel_hh(path_to_json_file):
     """
     Функция для обработки json файла и его экспорта в excel
     :param path_to_json_file: Путь к файлу json с вакансиями
     :return:
     """
-    with open(path_to_json_file,'r',encoding='utf-8') as file:
+    with open(path_to_json_file, 'r', encoding='utf-8') as file:
         data = json.load(file)
     # Счетчик строк
     count_rows = 0
     # Имя файла
-    name_file = 'data/' + str(datetime.now())[:10]+'_hh' + '.xlsx'
+    name_file = 'data/' + str(datetime.now())[:10] + '_hh' + '.xlsx'
     # Создаем объект
     workbook = xlsxwriter.Workbook(name_file)
     # Устанавливаем название листа
@@ -122,56 +128,90 @@ def export_json_to_excel_hh(path_to_json_file):
     # Создаем заголовки
     worksheet.write('A1', 'ID вакансии', bold)
     worksheet.write('B1', 'Населенный пункт', bold)
-    worksheet.write('C1', 'Название организации', bold)
-    worksheet.write('D1', 'ОГРН', bold)
-    worksheet.write('E1', 'ИНН', bold)
-    worksheet.write('F1', 'КПП', bold)
-    worksheet.write('G1', 'Телефон организации', bold)
-    worksheet.write('H1', 'Факс организации', bold)
-    worksheet.write('I1', 'E-mail', bold)
-    worksheet.write('J1', 'Дата размещения вакансии', bold)
-    worksheet.write('K1', 'Дата изменения вакансии', bold)
-    worksheet.write('L1', 'Вилка зарплаты', bold)
-    worksheet.write('M1', 'Минимальная зарплата', bold)
-    worksheet.write('N1', 'Максимальная зарплата', bold)
-    worksheet.write('O1', 'Название вакансии', bold)
-    worksheet.write('P1', 'Ссылка на вакансию', bold)
-    worksheet.write('Q1', 'Тип занятости', bold)
-    worksheet.write('R1', 'Рабочий график', bold)
-    worksheet.write('S1', 'Отрасль', bold)
-    worksheet.write('T1', 'Образование', bold)
-    worksheet.write('U1', 'Квалификация', bold)
-    worksheet.write('V1', 'Опыт работы', bold)
-    worksheet.write('W1', 'Адрес организации', bold)
-    worksheet.write('X1', 'Социальная защит', bold)
-    worksheet.write('Y1', 'Примечания', bold)
-    worksheet.write('Z1', 'Валюта зарплаты', bold)
-    worksheet.write('AA1', 'Описание вакансии', bold)
-    worksheet.write('AB1', 'Долгота', bold)
-    worksheet.write('AC1', 'Широта', bold)
+    worksheet.write('C1', 'Название вакансии', bold)
+    worksheet.write('D1', 'Минимальная зарплата', bold)
+    worksheet.write('E1', 'Максимальная зарплата', bold)
+    worksheet.write('F1', 'Оклад указан до вычета налогов', bold)
+    worksheet.write('G1', 'Название организации', bold)
+    worksheet.write('H1', 'Населенный пункт', bold)
+    worksheet.write('I1', 'Улица', bold)
+    worksheet.write('J1', 'Дом', bold)
+    worksheet.write('K1', 'Полный адрес', bold)
+    worksheet.write('L1', 'Требуемый опыт', bold)
+    worksheet.write('M1', 'График работы', bold)
+    worksheet.write('N1', 'Тип занятости', bold)
+    worksheet.write('O1', 'ФИО контактного лица', bold)
+    worksheet.write('P1', 'Адрес электронной почты', bold)
+    worksheet.write('Q1', 'Телефон работодателя', bold)
+    worksheet.write('R1', 'Требуемые навыки', bold)
+    worksheet.write('S1', 'Требуемые категории водительских прав', bold)
+    worksheet.write('T1', 'Для инвалидов', bold)
+    worksheet.write('U1', 'Для детей', bold)
+    worksheet.write('V1', 'Дата публикации вакансии', bold)
+    worksheet.write('W1', 'Дата создания вакансии', bold)
+    worksheet.write('X1', 'Описание вакансии', bold)
+    worksheet.write('Y1', 'Архивная вакансия', bold)
+    worksheet.write('Z1', 'Долгота ', bold)
+    worksheet.write('AA1', 'Широта', bold)
 
     for vac in data:
         count_rows += 1
         # TODO  Сделать более изящное решение через map
         # Собираем строку которую будем записывать
-        # Извлекаем адреса
-        row =vac['id'], vac['area']['name'], d['company'].get('name'), d['company'].get('ogrn'), d[
-            'company'].get('inn'), d['company'].get('kpp'), d['company'].get('phone'), d['company'].get('fax'), d[
-                  'company'].get('email'), d['creation-date'], d.get('modify-date'), d['salary'], d.get(
-            'salary_min'), d.get('salary_max'), d.get('job-name'), d['vac_url'], d['employment'], d['schedule'], d[
-                  'category']['specialisation'], d['requirement'].get('education'), d.get(
-            'qualification'), d['requirement'].get('experience'), address.get('location'), d.get(
-            'social_protected'), d['term']['text'] if d.get('term') else None, d.get('currency'),text, \
-              address.get('lng'), address.get('lat')
+        # Обрабатываем телефоны работодателя
+        arr = []
+        tmp = vac['contacts']['phones'] if vac.get('contacts') else []
+        for el in tmp:
+            phone = el['country'] + el['city'] + el['number']
+            arr.append(phone)
+        phones = ','.join(arr)
+        # Обрабатываем специализации
+        tmp_set_s = set()
+        for el in vac['specializations']:
+            tmp_set_s.add(el['name'])
+        specializations = ','.join(tmp_set_s)
+
+        # Обрабатываем список водительских прав
+        tmp_set_d = set()
+        for val in vac['driver_license_types']:
+            tmp_set_d.add(val)
+        driver_license = ','.join(tmp_set_d)
+
+        # Обработка описания вакансии.Удаление html-тегов
+        description = purification_text_from_html(vac['description'])
+        row = vac['id'], vac['area']['name'], vac['name'], vac['salary'].get('from') if vac.get('salary', {}) else None, \
+              vac['salary'].get('to') if vac.get('salary', {}) else None, \
+              vac['salary'].get('gross') if vac.get('salary', {}) else None, vac['employer']['name'], \
+              vac['address'].get('city') if vac.get('address', {}) else None, \
+              vac['address'].get('street') if vac.get('address', {}) else None, \
+              vac['address'].get('building') if vac.get('address', {}) else None, \
+              vac['address'].get('raw') if vac.get('address', {}) else None, \
+              vac['experience']['name'], \
+              vac[
+                  'schedule']['name'], vac['employment']['name'],\
+              vac['contacts'].get('name') if vac.get('contacts', {}) else None,\
+              vac['contacts'].get('email') if vac.get('contacts', {}) else None, phones, specializations, \
+              driver_license, vac['accept_handicapped'], vac['accept_kids'], vac['published_at'][:10], \
+              vac['created_at'][:10], description, vac['archived'], vac['address'].get('lat') if vac.get('address', {}) else None, \
+              vac['address'].get('lng') if vac.get('address', {}) else None
+
         worksheet.write_row(count_rows, 0, list(row))
     workbook.close()
+
+
+def purification_text_from_html(text):
+    """
+    Функция для очистки текста от html-тегов
+    :param text:
+    :return:
+    """
+    return re.sub(r'</?\w*?>|&\w+;|<[^а-яА-ЯёЁ]+>', '', text)
 
 
 if __name__ == '__main__':
     # data = load_vacancy_hh()
     # write_vacancy_to_json_hh(data)
     # export_json_to_excel_hh('data/2020-07-29_hh.json')
-    data = load_full_data_vacancy_hh('data/2020-07-29_hh.json')
-    write_vacancy_to_json_hh(data,mark='full')
-
-
+    # data = load_full_data_vacancy_hh('data/2020-07-29_hh.json')
+    # write_vacancy_to_json_hh(data, mark='full')
+    export_json_to_excel_hh('data/2020-07-29_full_hh.json')

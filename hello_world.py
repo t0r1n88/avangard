@@ -19,17 +19,19 @@ from trudvsem import *
 #     response = requests.get("http://opendata.trudvsem.ru/api/v1/vacancies/region/0300000000000?offset=0")
 #     json.dump(response.json(),file,ensure_ascii=False,indent=4)
 
-response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
-print(response.json()['items'])
-# with open('data/example_json_hh.json', 'w', encoding='utf-8') as file:
-#     json.dump(response.json(),file, ensure_ascii=False, indent=4)
-
-response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
-data = response.json()
-arr = []
-# Забираем вакансии
-vacancies = data['items']
-for vacancy in vacancies:
-    # Добавляем вакансии в список
-    arr.append(vacancy)
-print(arr)
+# response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
+# print(response.json()['items'])
+# # with open('data/example_json_hh.json', 'w', encoding='utf-8') as file:
+# #     json.dump(response.json(),file, ensure_ascii=False, indent=4)
+#
+# response = requests.get("https://api.hh.ru/vacancies?area=1118&page=" + str(0) + "&per_page=100")
+# data = response.json()
+# arr = []
+# # Забираем вакансии
+# vacancies = data['items']
+# for vacancy in vacancies:
+#     # Добавляем вакансии в список
+#     arr.append(vacancy)
+# print(arr)
+d = set()
+print(type(d))

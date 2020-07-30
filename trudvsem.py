@@ -168,6 +168,6 @@ def get_name_file(path, name='/' + str(datetime.now())[:10], type='.json'):
 
 
 if __name__ == '__main__':
-    # data = load_vacancy_trudvsem()
-    # write_vacancy_to_json_trudvsem(data)
-    export_json_excel('data/2020-07-28.json')
+    data = load_vacancy_trudvsem()
+    write_vacancy_to_json_trudvsem(data)
+    export_json_excel('data/2020-07-30.json')

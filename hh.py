@@ -156,7 +156,6 @@ def export_json_to_excel_hh(path_to_json_file):
 
     for vac in data:
         count_rows += 1
-        # TODO  Сделать более изящное решение через map
         # Собираем строку которую будем записывать
         # Обрабатываем телефоны работодателя
         phones = extract_phones_employment_hh(vac)
